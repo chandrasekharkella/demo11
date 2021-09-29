@@ -1,0 +1,782 @@
+non-local variables:
+-------------------
+	we can define a variable inside the outer function and above the inner function definition,now that variables act as a nonlocal to the inner function,.
+
+	we can access the non-local variables data with in the outer function(inside the inner function and outside the inner function)
+
+ex:
+---
+def f1(): #outer function
+    x=10
+    def f2(): #inner function
+        print(x)
+    f2()
+    print(x)
+f1()
+print(x)
+
+output:
+------
+10
+10
+Traceback (most recent call last):
+  File "C:/Python39/e.py", line 8, in <module>
+    print(x)
+NameError: name 'x' is not defined
+
+
+	in python,directly we cannot modify the nonlocal variables data with in the inner function.
+
+ex:
+---
+def f1(): #outer function
+    x=10
+    def f2(): #inner function
+        print(x)
+        x+=5
+        print(x)
+    f2()
+    print(x)
+f1()
+
+output:
+-------
+Traceback (most recent call last):
+  File "C:/Python39/e.py", line 9, in <module>
+    f1()
+  File "C:/Python39/e.py", line 7, in f1
+    f2()
+  File "C:/Python39/e.py", line 4, in f2
+    print(x)
+UnboundLocalError: local variable 'x' referenced before assignment
+
+
+	if we want to modify the non-local variables data with in the inner function by using forward decleration mechanism.
+
+	nonlocal nonlocalvariuablename
+
+	once we can modify the non-local variables data that is effected in remaing all cases in the outer function(with in the inner function and outside the inner function).
+
+ex:
+---
+def f1(): #outer function
+    x=10
+    def f2(): #inner function
+        nonlocal x
+        print(x)
+        x+=5
+        print(x)
+    f2()
+    print(x)
+f1()
+
+output:
+------
+10
+15
+15
+
+ex:
+---
+x=10
+def f1():
+    y=20
+    global x
+    x+=5
+    def f2():
+        global x
+        nonlocal y
+        z=30
+        print(x)
+        print(y)
+        print(z)
+        x+=5
+        y+=5
+        z+=5
+        print(x)
+        print(y)
+        print(z)
+    f2()
+    print(x)
+    print(y)
+f1()
+print(x)
+
+output:
+-------
+15
+20
+30
+20
+25
+35
+20
+25
+20
+
+scope of the variables:
+----------------------
+	in python,the scope of the variables are following LEGB rule
+
+	L	--> Local
+
+	E	--> Encloseing
+
+	G	--> Global
+
+	B	--> Builtins
+
+
+
+ex:
+---
+x=1
+y=2
+z=3
+def f1():
+    y=20
+    z=30
+    def f2():
+        z=300
+        print(x)
+        print(y)
+        print(z)
+    f2()
+    print(x)
+    print(y)
+    print(z)
+f1()
+print(x)
+print(y)
+print(z)
+
+output:
+-------
+1
+20
+300
+1
+20
+30
+1
+2
+3
+
+ex:
+---
+def cal():
+    print("hai")
+    def sum(x):
+        print(x)
+    sum([3,4,5])
+cal()
+print(sum([3,4,5]))
+
+output:
+------
+hai
+[3, 4, 5]
+12
+
+function recurssion:
+--------------------
+	a function can call itself,is known as a function recurssion.
+
+ex:
+---
+to find the factorial of the given number?
+
+5!
+
+5*(5-1)!
+5*4*(4-1)!
+5*4*3*(3-1)!
+5*4*3*2*(2-1)!
+5*4*3*2*1*(1-1)!
+5*4*3*2*1*0!
+5*4*3*2*1*1
+20*3*2*1*1
+60*2*1*1
+120*1*1
+120*1
+120
+
+num=int(input("enter your number: "))
+def my_fact(x):
+    if x==0:
+        return 1
+    else:
+        return x*my_fact(x-1)
+res=my_fact(num)
+print("the factorial of %d is:%d"%(num,res))
+
+output:
+------
+enter your number: 5
+the factorial of 5 is:120
+
+ex:
+---
+num=int(input("enter your number: "))
+def my_fact(x):
+    if x==0:
+        return 1
+    else:
+        return x*my_fact(x-1)
+for i in range(num+1):
+    res=my_fact(i)
+    print("the factorial of %d is:%d"%(i,res))
+
+output:
+-----
+enter your number: 5
+the factorial of 0 is:1
+the factorial of 1 is:1
+the factorial of 2 is:2
+the factorial of 3 is:6
+the factorial of 4 is:24
+the factorial of 5 is:120
+
+ex:
+---
+from math import factorial
+num=int(input("enter your number: "))
+print("the factorial of %d is:%d"%(num,factorial(num)))
+
+output:
+-----
+enter your number: 5
+the factorial of 5 is:120
+
+		anonymus functions
+		-----------------
+	we can define a function with out a function name,that type of functions are called anonymus functions.
+
+
+	we can define/create a normal functions by using "def" keyword
+
+syntax:
+-----
+	def functionname():
+		-------
+		-------
+		-------
+
+	we can define/create a anonymus functions by using "lambda" keyword,because of that reason anonymus functions are also called lambda functions.
+
+syntax:
+-----
+	lambda arguments:expression
+
+ex1:
+---
+create a normal function,to return the addition of two numbers?
+
+def add(x,y):
+    return x+y
+print(add(4,5))
+print(type(add))
+
+output:
+------
+9
+<class 'function'>
+
+	by using anonymus function:
+	--------------------------
+add=lambda x,y:x+y
+print(add(4,5))
+print(type(add))
+
+output:
+------
+9
+<class 'function'>
+
+ex2:
+---
+create a normal to perform arithmetic calculations?
+
+def cal(x,y):
+    return x+y,x-y,x*y,x/y
+print(cal(4,5))
+
+output:
+------
+(9, -1, 20, 0.8)
+
+	by using anonymus function
+	--------------------------
+cal=lambda x,y:(x+y,x-y,x*y,x/y)
+print(cal(4,5))
+
+output:
+------
+(9, -1, 20, 0.8)
+
+ex3:
+---
+create a normal function to return the given number is either positive or negative or zero?
+
+def pnz(x):
+    if x>0:
+        return "Positive"
+    else:
+        if x<0:
+            return "Negative"
+        else:
+            return "zero"
+
+num=int(input("enter your number: "))
+print(pnz(num))
+        
+output:
+------
+enter your number: 5
+Positive
+
+enter your number: -2
+Negative
+
+enter your number: 0
+zero
+
+
+	by using anonymus function
+	-----------------------------
+pnz=lambda x:"positive" if x>0 else "negative" if x<0 else "zero"
+num=int(input("enter your number: "))
+print(pnz(num))
+
+output:
+------
+enter your number: 5
+positive
+
+enter your number: -2
+negative
+
+enter your number: 0
+zero
+
+
+usecases of lambda keyword:
+---------------------------
+	if we want to create nameless functions with in short period of time.
+
+	lambda keyword is used to create single-line functions
+
+	the lambda functions are used in higher order functions
+					 ------------
+					       |
+		a function takes the parameter as a another function
+
+
+ 	the builtin higher-order functions are filter(),map() and reduce() functions.
+
+
+filter()
+--------
+	the filter() is builtin function in both python2.x and python3.x versions.
+
+	the filter(),to return the filter object
+
+	filter(function,iterableobj)
+
+	the filter(),takes the one by one element from the given iterable object,to check the condition,based on that condition to return the values and ignore the values.
+
+ex:
+---
+x=[4,3,5,2,6,8,7,9]
+y=filter(lambda i: i%2==0,x)
+print(y)
+print(type(y))
+for i in y:
+    print(i)
+
+
+output:
+------
+<filter object at 0x000002098D59FBB0>
+<class 'filter'>
+4
+2
+6
+8
+
+ex2:
+----
+y=list(filter(lambda i: i%2==0,[4,3,5,2,6,8,7,9]))
+print(y)
+
+map()
+-----
+	the map() is a builtin function in both python.2x and python3.x
+
+	the map() to return the map object
+
+	map(function,*iterableobj)
+
+	the map() takes the one by one element from the given iterable objects to perform the operation and to return the result.
+
+ex:
+---
+x=[4,3,5,2,6,8,7,9]
+y=map(lambda i: i%2==0,x)
+print(y)
+print(type(y))
+for i in y:
+    print(i)
+
+output:
+------
+<map object at 0x000002113BBBFBB0>
+<class 'map'>
+True
+False
+False
+True
+True
+True
+False
+False
+
+ex2:
+---
+print(list(map(lambda i: i+2,[4,3,5,2,6,8,7,9])))
+
+output:
+------
+[6, 5, 7, 4, 8, 10, 9, 11]
+
+ex3:
+----
+print(list(map(lambda i,j: i+j,[4,5,6],[3,2,1])))
+
+output:
+------
+[7, 7, 7]
+
+
+reduce()
+-------
+	reduce() is a builtin function in python2.x 
+
+	reduce() is not a builtin function in python3.x versions
+
+	the reduce(),to reduce the no.of elements into single value
+
+	reduce(function,iterableobj)
+
+ex:
+---
+from functools import reduce
+print(reduce(lambda i,j:i+j,[5,6,4,7]))
+
+output:
+------
+22
+
+ex:
+---
+from functools import reduce
+print(reduce(lambda i,j:i if i<j else j,[5,6,4,7]))
+
+output:
+------
+4
+
+ex1:
+----
+create a function to return the no.of elements/charecters in a given iterable object?
+
+obj=eval(input("enter your iterable object: "))
+def my_len(x):
+    c=0
+    for i in x:
+        c+=1
+    print(c)
+my_len(obj)
+
+output:
+------
+enter your iterable object: [6,4,5,3,2]
+5
+
+enter your iterable object: "krishna"
+7
+
+ex:
+---
+create a function to return the sum of the given iterable object elements?
+
+obj=eval(input("enter your iterable object: "))
+def my_sum(x):
+    s=0
+    for i in x:
+        s+=i
+    print(s)
+my_sum(obj)
+
+output:
+------
+enter your iterable object: [6,4,5,3,2]
+20
+
+ex:
+---
+create a function to return the minimum element from the given iterable object?
+
+obj=eval(input("enter your iterable object: "))
+def my_min(x):
+    m=x[0]
+    for i in x:
+        if i<m:
+            m=i
+    print(m)
+my_min(obj)
+
+output:
+------
+enter your iterable object: [6,4,5,3,2]
+2
+
+ex:
+---
+create a function to return the maximum element from the given iterable object?
+
+obj=eval(input("enter your iterable object: "))
+def my_max(x):
+    m=x[0]
+    for i in x:
+        if i>m:
+            m=i
+    print(m)
+my_max(obj)
+
+output:
+-------
+enter your iterable object: [6,4,5,3,2]
+6
+
+ex:
+--
+create a function,to return the elements in reverse order?
+
+obj=eval(input("enter your iterable object: "))
+def my_rev_ord(x):
+    y=[]
+    for i in range(len(x)-1,-1,-1):
+        y.append(x[i])
+    print(y)
+my_rev_ord(obj)
+
+	(or)
+
+obj=eval(input("enter your iterable object: "))
+def my_rev_ord(x):
+    print(x[::-1])
+my_rev_ord(obj)
+
+output:
+------
+enter your iterable object: [6,4,5,3,2]
+[2, 3, 5, 4, 6]
+
+
+
+ex1:
+----
+create a function to return the elements in ascending order from the given iterable object?
+
+obj=eval(input("enter your iterableobj: "))
+def asc_ord(x):
+    for i in range(len(x)):
+        for j in range(i+1,len(x)):
+            if x[i]>x[j]:
+                x[i],x[j]=x[j],x[i]
+    print(x)
+asc_ord(obj)
+        
+output:
+-----
+enter your iterableobj: [5,3,6,2]
+[2, 3, 5, 6]
+
+
+ex2:
+---
+create a function to return the elements in descending order from the given iterable object?
+
+obj=eval(input("enter your iterableobj: "))
+def desc_ord(x):
+    for i in range(len(x)):
+        for j in range(i+1,len(x)):
+            if x[i]<x[j]:
+                x[i],x[j]=x[j],x[i]
+    print(x)
+desc_ord(obj)
+        
+output:
+------
+enter your iterableobj: [5,3,6,2]
+[6, 5, 3, 2]
+
+
+call by value
+     (or)
+pass by value
+-------------
+	in call by value or pass by value original value is not modified.
+
+ex:
+---
+x=10
+def f1(y):
+    print(y)
+    y+=5
+    print(y)
+f1(x)
+print(x)
+
+output:
+------
+10
+15
+10
+
+ex2:
+----
+x=[1,2,3]
+def f1(y):
+    print(y)
+    y=[10,20,30]
+    print(y)
+f1(x)
+print(x)
+
+output:
+-----
+[1, 2, 3]
+[10, 20, 30]
+[1, 2, 3]
+
+
+
+call by reference
+     (or)
+pass by reference
+-----------------
+	in call by reference or pass by reference original value also modified.
+
+	in python,we can perform the call by reference by using indexing concept
+
+ex:
+---
+x=[1,2,3]
+def f1(y):
+    print(y)
+    y[0]=10
+    y[1]=20
+    y[2]=30
+    print(y)
+f1(x)
+print(x)
+
+output:
+------
+[1, 2, 3]
+[10, 20, 30]
+[10, 20, 30]
+
+ex:
+---
+wap to perform addition of two numbers?
+
+sample input:
+		4
+		5
+
+sample output:
+		9
+
+x=int(input())
+y=int(input())
+print(x+y)
+
+ex:
+---
+wap to perform addition of two numbers?
+
+sample input:
+		4,5
+sample output:
+		9
+
+x,y=eval(input())
+print(x+y)
+
+
+ex:
+---
+wap to perform addition of two numbers?
+
+sample input:
+		4 5
+sample output:
+		9
+
+
+x,y=input().split()
+print(int(x)+int(y))
+
+	(or)
+
+x,y=map(int,input().split())
+print(x+y)
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
